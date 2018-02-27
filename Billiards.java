@@ -23,6 +23,7 @@ public class Billiards extends JFrame {
 	private final int N_BALL = 9;
 	private Ball[] balls;
 
+	ExecutorService executor;
 	private Thread[] threads;
 
 	public Billiards() {
@@ -84,7 +85,7 @@ public class Billiards extends JFrame {
 	private class StartListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			ExecutorService executor = Executors.newFixedThreadPool(N_BALL);
+			executor = Executors.newFixedThreadPool(N_BALL);
 
 			if (threads == null) {
 				threads = new Thread[N_BALL];
@@ -99,8 +100,10 @@ public class Billiards extends JFrame {
 	private class StopListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			// TODO Code is executed when stop button is pushed
-
+			if (threads != null) {
+				executor.shutdownNow();
+				threads = null;
+			}
 		}
 	}
 
