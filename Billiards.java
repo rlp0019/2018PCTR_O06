@@ -59,6 +59,24 @@ public class Billiards extends JFrame {
 		board.setBalls(balls);
 	}
 
+	private Thread createThread(final Ball ball) {
+		Runnable loop = new Runnable() {
+			@Override
+			public void run() {
+				try {
+					while (true) {
+						ball.move();
+						board.repaint();
+						Thread.sleep(100);
+					}
+				} catch (InterruptedException e) {
+					return;
+				}
+			}
+		};
+		return new Thread(loop);
+	}
+
 	private class StartListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
