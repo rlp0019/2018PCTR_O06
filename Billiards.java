@@ -3,6 +3,8 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -20,6 +22,8 @@ public class Billiards extends JFrame {
 
 	private final int N_BALL = 9;
 	private Ball[] balls;
+
+	private Thread[] threads;
 
 	public Billiards() {
 
@@ -80,8 +84,15 @@ public class Billiards extends JFrame {
 	private class StartListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			// TODO Code is executed when start button is pushed
+			ExecutorService executor = Executors.newFixedThreadPool(N_BALL);
 
+			if (threads == null) {
+				threads = new Thread[N_BALL];
+				for (int i = 0; i < N_BALL; i++) {
+					threads[i] = createThread(balls[i]);
+					executor.execute(threads[i]);
+				}
+			}
 		}
 	}
 
